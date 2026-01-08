@@ -45,7 +45,13 @@ def average_by_day():
 
     days_above_avg = df_day.loc[df_day['Amount'] > median]
     
-    days_above_avg['Category'] = days_above_avg['Date'].apply(lambda date: get_most_spent_categry(df, date))
+    daily_top_cat = (df.groupby(['Date', 'Category'])['Amount'].sum().reset_index()
+                        .sort_values(['Date', 'Amount'], ascending=[True, False])
+                        .drop_duplicates(subset=['Date'])[['Date', 'Category']]
+                        .rename(columns={'Category': 'Top_Category'})
+                    )
+    
+    days_above_avg = days_above_avg.merge(daily_top_cat, on='Date')
 
     table = Table(title='Top 3 weekdays with highest average expenses')
     table.add_column('Weekday', style='cyan', no_wrap=True)
@@ -59,7 +65,7 @@ def average_by_day():
     table.add_column('Total Amount', style='magenta')
     table.add_column('Most spent on', style='yellow', no_wrap=False)
     for row in days_above_avg.itertuples():
-        table.add_row(datetime.strptime(row.Date, "%Y-%m-%d").strftime("%b %d, %a"), f"{row.Amount:.2f} JOD", row.Category, end_section=True)
+        table.add_row(datetime.strptime(row.Date, "%Y-%m-%d").strftime("%b %d, %a"), f"{row.Amount:.2f} JOD", row.Top_Category, end_section=True)
     console.print(table)
 
     CV = df_day['Amount'].std() / df_day['Amount'].mean()
