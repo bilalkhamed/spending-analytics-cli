@@ -34,3 +34,8 @@ def date_input():
             date_str = datetime.today().strftime('%Y-%m-%d')
 
     return datetime.strptime(date_str, '%Y-%m-%d')
+
+def get_most_spent_categry(df: pd.DataFrame, date: str):
+    day = df.loc[df['Date'] == date]
+    grp = day.groupby('Category')['Amount'].sum().reset_index()
+    return grp.loc[grp['Amount'].idxmax(axis=0)]['Category']
