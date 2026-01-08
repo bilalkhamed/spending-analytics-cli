@@ -12,7 +12,9 @@ def load_categories(csv_file):
         else:
             raise ValueError("CSV file must contain 'Name' column.")
     except FileNotFoundError:
-        raise FileNotFoundError(f"The file {csv_file} does not exist.")
+        with open(csv_file, 'w') as f:
+            f.write("Name,Description\n")  # Create an empty CSV with header
+        return []
     except ValueError:
         raise ValueError("Error reading categories from CSV file.")
 

@@ -5,6 +5,12 @@ EXPENSES_FILE = Path("data/expenses.csv")
 CATEGORIES_FILE = Path("data/categories.csv")
 USER_CONFIG_FILE = Path("data/user_config.json")
 
+EXPENSES_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+if not EXPENSES_FILE.exists():
+    with open(EXPENSES_FILE, 'w') as f:
+        f.write("Date,Amount,Category,Description\n")
+
 DEFAULT_CONFIG = {
     'currency': 'JOD',
     'monthly_budget': 500

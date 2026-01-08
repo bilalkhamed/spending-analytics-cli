@@ -13,15 +13,13 @@ from rich.progress import Progress
 from src.config import EXPENSES_FILE, CATEGORIES_FILE, USER_CONFIG
 
 
-categories = load_categories(CATEGORIES_FILE)
-
 CURRENCY = USER_CONFIG['currency']
 
 def add_expense():
-    if not os.path.exists(EXPENSES_FILE):
-        with open(EXPENSES_FILE, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['Date', 'Amount', 'Category', 'Description'])
+    categories = load_categories(CATEGORIES_FILE)
+    if categories is None or len(categories) == 0:
+        print('No categories found. Please add categories first!')
+        return
     while True:
         print('\n--- New Transaction ---')
         
