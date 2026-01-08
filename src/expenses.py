@@ -104,7 +104,7 @@ def view_by_category():
     summary = summary.sort_values(by='Amount', ascending=False)
 
     total_spent = summary['Amount'].sum()
-    most_frequent_cat = summary['Category'].mode()[0]
+    most_frequent_cat = df['Category'].mode()[0]
     highest_expense = summary.loc[summary['Amount'].idxmax()]
     
     # --- PART 2: Create "Cards" for the Stats ---
