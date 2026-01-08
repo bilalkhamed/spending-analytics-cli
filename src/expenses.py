@@ -9,10 +9,12 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.align import Align
 from rich.columns import Columns
-from src.config import EXPENSES_FILE, CATEGORIES_FILE
+from src.config import EXPENSES_FILE, CATEGORIES_FILE, USER_CONFIG
 
 
 categories = load_categories(CATEGORIES_FILE)
+
+CURRENCY = USER_CONFIG['currency']
 
 def add_expense():
     if not os.path.exists(EXPENSES_FILE):
@@ -23,7 +25,7 @@ def add_expense():
         print('\n--- New Transaction ---')
         
         amount = questionary.text(
-            'Enter amount (JOD):',
+            f'Enter amount ({CURRENCY}):',
             validate=lambda text: True if text.replace('.', '', 1).isdigit() and float(text) > 0 else 'Please enter a valid positive number'
         ).ask()
 
@@ -51,7 +53,7 @@ def add_expense():
             writer = csv.writer(file)
             writer.writerow([date, amount, category, notes])
 
-        questionary.print(f'✔ Saved: {amount} JOD for {category} on {date}', style='bold fg:green')
+        questionary.print(f'✔ Saved: {amount} {CURRENCY} for {category} on {date}', style='bold fg:green')
 
         # Ask to continue
         if not questionary.confirm('Add another?').ask():
@@ -79,7 +81,7 @@ def view_expenses():
     for row in df.itertuples():
         table.add_row(
             row.Date,
-            f'{row.Amount:.2f} JOD',
+            f'{row.Amount:.2f} {CURRENCY}',
             row.Category,
             str(row.Description) if pd.notna(row.Description) else '-'
         )
@@ -110,9 +112,9 @@ def view_by_category():
     # --- PART 2: Create "Cards" for the Stats ---
     # We use Panels to make them look like cards
     stats_cards = [
-        Panel(f"[green]{total_spent:.2f} JOD[/green]", title="Total Spent", ),
+        Panel(f"[green]{total_spent:.2f} {CURRENCY}[/green]", title="Total Spent", ),
         Panel(f"[cyan]{most_frequent_cat}[/cyan]", title="Most Purchases", ),
-        Panel(f"[red]{highest_expense['Amount']:.2f} JOD[/red]\n({highest_expense['Category']})", title="Most Spent", )
+        Panel(f"[red]{highest_expense['Amount']:.2f} {CURRENCY}[/red]\n({highest_expense['Category']})", title="Most Spent", )
     ]
 
     # Print the cards centered
@@ -123,18 +125,18 @@ def view_by_category():
     # Print it using your nice Table method...
     table = Table(title='Expenses by Category')
     table.add_column('Category', justify='left', style='magenta')
-    table.add_column('Total Amount (JOD)', justify='right', style='green')
+    table.add_column(f'Total Amount ({CURRENCY})', justify='right', style='green')
     for row in summary.itertuples():
         table.add_row(
             row.Category,
-            f'{row.Amount:.2f} JOD',
+            f'{row.Amount:.2f} {CURRENCY}',
         )
 
 
     table.add_section()
     table.add_row(
         'Total',
-        f'{summary["Amount"].sum():.2f} JOD',
+        f'{summary["Amount"].sum():.2f} {CURRENCY}',
     )
 
     console.print(table)
@@ -162,7 +164,7 @@ def view_by_date(date):
 
     for row in expenses.itertuples():
         table.add_row(
-            f'{row.Amount:.2f} JOD',
+            f'{row.Amount:.2f} {CURRENCY}',
             row.Category,
             str(row.Description) if pd.notna(row.Description) else '-'
         )
@@ -170,7 +172,7 @@ def view_by_date(date):
     table.add_section()
 
     table.add_row(
-        f'Total: [bold]{expenses['Amount'].sum():.2f} JOD[/bold]',
+        f'Total: [bold]{expenses["Amount"].sum():.2f} {CURRENCY}[/bold]',
         '',
         f''
     )

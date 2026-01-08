@@ -6,19 +6,17 @@ from rich.console import Console
 from rich.align import Align
 from rich.panel import Panel
 from datetime import datetime
-from src.config import EXPENSES_FILE
-
-
-EXPENSES_FILE
+from src.config import EXPENSES_FILE, USER_CONFIG
 
 df = pd.read_csv(EXPENSES_FILE)
+
+CURRENCY = USER_CONFIG['currency']
 
 def average_expense():
     console = Console()
     mean = df['Amount'].mean()
-    # console.print(f"[bold green]✔ Average Expense: {mean:.2f} JOD[/bold green]")
 
-    console.print(Align.left(Panel(f"[bold green]{mean:.2f} JOD[/bold green]", border_style="blue", title="Average Expense")))
+    console.print(Align.left(Panel(f"[bold green]{mean:.2f} {CURRENCY}[/bold green]", border_style="blue", title="Average Expense")))
 
     categories = df.groupby('Category')['Amount'].mean()
 
@@ -26,7 +24,7 @@ def average_expense():
     table.add_column('Category', style='cyan', no_wrap=True)
     table.add_column('Average Amount', style='magenta')
     for category, amount in categories.items():
-        table.add_row(category, f"{amount:.2f} JOD")
+        table.add_row(category, f"{amount:.2f} {CURRENCY}")
     
     console.print(table)
 
@@ -42,7 +40,7 @@ def average_by_day():
     
 
     median = df_day['Amount'].median()
-    console.print(Align.left(Panel(f"[bold green]{median:.2f} JOD[/bold green]", border_style="blue", title="Average Expense")))
+    console.print(Align.left(Panel(f"[bold green]{median:.2f} {CURRENCY}[/bold green]", border_style="blue", title="Average Expense")))
 
     days_above_avg = df_day.loc[df_day['Amount'] > median]
     
@@ -58,7 +56,7 @@ def average_by_day():
     table.add_column('Weekday', style='cyan', no_wrap=True)
     table.add_column('Average Amount', style='magenta')
     for row in weekday_top_3.itertuples():
-        table.add_row(row.Weekday, f"{row.Amount:.2f} JOD")
+        table.add_row(row.Weekday, f"{row.Amount:.2f} {CURRENCY}")
     console.print(table)
 
     table = Table(title=f'Days with expenses above average {days_above_avg.shape[0]} / {df_day.shape[0]}')
@@ -66,7 +64,7 @@ def average_by_day():
     table.add_column('Total Amount', style='magenta')
     table.add_column('Most spent on', style='yellow', no_wrap=False)
     for row in days_above_avg.itertuples():
-        table.add_row(datetime.strptime(row.Date, "%Y-%m-%d").strftime("%b %d, %a"), f"{row.Amount:.2f} JOD", row.Top_Category, end_section=True)
+        table.add_row(datetime.strptime(row.Date, "%Y-%m-%d").strftime("%b %d, %a"), f"{row.Amount:.2f} {CURRENCY}", row.Top_Category, end_section=True)
     console.print(table)
 
     CV = df_day['Amount'].std() / df_day['Amount'].mean()
