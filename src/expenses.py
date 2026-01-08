@@ -148,7 +148,7 @@ def view_by_date(date):
     df = pd.read_csv(EXPENSES_FILE)
     console = Console()
 
-    expenses = df.loc[df['Date'] == date]
+    expenses = df.loc[df['Date'] == datetime.strftime(date, '%Y-%m-%d')]
 
     if expenses.empty:
         console.print(f'No expenses found for [bold]{datetime.strftime(date, "%Y-%m-%d")}[/bold].', style='yellow')
