@@ -13,9 +13,9 @@ from rich.progress import Progress
 from src.config import EXPENSES_FILE, CATEGORIES_FILE, USER_CONFIG
 
 
-CURRENCY = USER_CONFIG['currency']
 
 def add_expense():
+    CURRENCY = USER_CONFIG['currency']
     categories = load_categories(CATEGORIES_FILE)
     if categories is None or len(categories) == 0:
         print('No categories found. Please add categories first!')
@@ -59,6 +59,7 @@ def add_expense():
             break
 
 def view_expenses():
+    CURRENCY = USER_CONFIG['currency']
     if not os.path.exists(EXPENSES_FILE):
         print('No expenses recorded yet.')
         return
@@ -94,6 +95,8 @@ def view_expenses():
     console.print(f'{percent:.2f}% used of your monthly budget of {USER_CONFIG["monthly_budget"]} {CURRENCY}')
 
 def view_by_category():
+    CURRENCY = USER_CONFIG['currency']
+
     if not os.path.exists(EXPENSES_FILE):
         print('No expenses recorded yet.')
         return
@@ -146,6 +149,8 @@ def view_by_category():
 
 
 def view_by_date(date):
+    CURRENCY = USER_CONFIG['currency']
+   
     if not os.path.exists(EXPENSES_FILE):
         print('No expenses recorded yet.')
         return

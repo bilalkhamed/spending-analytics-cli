@@ -10,9 +10,10 @@ from src.config import EXPENSES_FILE, USER_CONFIG
 
 df = pd.read_csv(EXPENSES_FILE)
 
-CURRENCY = USER_CONFIG['currency']
 
 def average_expense():
+    CURRENCY = USER_CONFIG['currency']
+    
     console = Console()
     mean = df['Amount'].mean()
 
@@ -30,6 +31,8 @@ def average_expense():
 
 
 def average_by_day():
+    CURRENCY = USER_CONFIG['currency']
+
     pd.set_option('mode.copy_on_write', True)
     console = Console()
     df_day = df.groupby('Date')['Amount'].sum().reset_index()
@@ -79,13 +82,9 @@ def average_by_day():
     console.print(Align.left(Panel(text, border_style="blue", title="Expense Variability", subtitle=f"Coefficient of Variation: {CV:.2f}")))
 
 
-def predict_rest_of_month():
-    print("Predicting expenses for the rest of the month...")
-
 operations = {
     'Average Expense': average_expense,
     'Average by Day': average_by_day,
-    'Predict Rest of Month': predict_rest_of_month
 }
 
 def main():
