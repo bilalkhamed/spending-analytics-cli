@@ -6,7 +6,8 @@ CATEGORIES_FILE = Path("data/categories.csv")
 USER_CONFIG_FILE = Path("data/user_config.json")
 
 DEFAULT_CONFIG = {
-    'currency': 'JOD'
+    'currency': 'JOD',
+    'monthly_budget': 500
 }
 
 def load_user_config():
