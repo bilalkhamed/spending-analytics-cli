@@ -1,5 +1,5 @@
 import questionary
-from src import categories, expenses, analysis, utils, charts
+from src import categories, expenses, analysis, utils, settings,  charts
 
 operations = ['Add Category', 'Add Expense', 'View All Expenses', 'View By Category', 'View By Date' , 'Exit']
 
@@ -11,6 +11,7 @@ operations = {
     'View By Date': lambda: expenses.view_by_date(utils.date_input()),
     'View Analysis': analysis.main,
     'View Charts': charts.generate_charts,
+    'Settings': settings.settings,
     'Exit': lambda: print("Exiting the program.")
 }
 
