@@ -9,6 +9,7 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.align import Align
 from rich.columns import Columns
+from rich.progress import Progress
 from src.config import EXPENSES_FILE, CATEGORIES_FILE, USER_CONFIG
 
 
@@ -89,6 +90,10 @@ def view_expenses():
     console = Console()
     console.print(table)
 
+    total = df['Amount'].sum()
+    percent = (total / USER_CONFIG['monthly_budget']) * 100
+    console.print(f'Total Spent: {total:.2f} {CURRENCY}')
+    console.print(f'{percent:.2f}% used of your monthly budget of {USER_CONFIG["monthly_budget"]} {CURRENCY}')
 
 def view_by_category():
     if not os.path.exists(EXPENSES_FILE):
