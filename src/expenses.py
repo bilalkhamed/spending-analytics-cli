@@ -9,14 +9,14 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.align import Align
 from rich.columns import Columns
+from src.config import EXPENSES_FILE, CATEGORIES_FILE
 
-DATA_FILE = 'data/expenses.csv'
 
-categories = load_categories('data/categories.csv')
+categories = load_categories(CATEGORIES_FILE)
 
 def add_expense():
-    if not os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'w', newline='') as file:
+    if not os.path.exists(EXPENSES_FILE):
+        with open(EXPENSES_FILE, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Date', 'Amount', 'Category', 'Description'])
     while True:
@@ -47,7 +47,7 @@ def add_expense():
         notes = questionary.text('Description (optional):').ask()
 
         # Save to CSV
-        with open(DATA_FILE, 'a', newline='') as file:
+        with open(EXPENSES_FILE, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([date, amount, category, notes])
 
@@ -58,11 +58,11 @@ def add_expense():
             break
 
 def view_expenses():
-    if not os.path.exists(DATA_FILE):
+    if not os.path.exists(EXPENSES_FILE):
         print('No expenses recorded yet.')
         return
 
-    df = pd.read_csv(DATA_FILE)
+    df = pd.read_csv(EXPENSES_FILE)
     if df.empty:
         print('No expenses recorded yet.')
         return
@@ -89,11 +89,11 @@ def view_expenses():
 
 
 def view_by_category():
-    if not os.path.exists(DATA_FILE):
+    if not os.path.exists(EXPENSES_FILE):
         print('No expenses recorded yet.')
         return
 
-    df = pd.read_csv(DATA_FILE)
+    df = pd.read_csv(EXPENSES_FILE)
     console = Console()
 
     # Group by 'Category' and sum the 'Amount'
@@ -141,11 +141,11 @@ def view_by_category():
 
 
 def view_by_date(date):
-    if not os.path.exists(DATA_FILE):
+    if not os.path.exists(EXPENSES_FILE):
         print('No expenses recorded yet.')
         return
 
-    df = pd.read_csv(DATA_FILE)
+    df = pd.read_csv(EXPENSES_FILE)
     console = Console()
 
     expenses = df.loc[df['Date'] == date]

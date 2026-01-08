@@ -6,11 +6,12 @@ from rich.console import Console
 from rich.align import Align
 from rich.panel import Panel
 from datetime import datetime
+from src.config import EXPENSES_FILE
 
 
-DATA_FILE = 'data/expenses.csv'
+EXPENSES_FILE
 
-df = pd.read_csv(DATA_FILE)
+df = pd.read_csv(EXPENSES_FILE)
 
 def average_expense():
     console = Console()

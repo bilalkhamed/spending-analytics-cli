@@ -1,13 +1,13 @@
 import questionary
 import csv
 import os
+from src.config import CATEGORIES_FILE
 
 # Define file name
-DATA_FILE = 'data/categories.csv'
 
 def add_category():
-    if not os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'w', newline='') as file:
+    if not os.path.exists(CATEGORIES_FILE):
+        with open(CATEGORIES_FILE, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Name", "Description"])
 
@@ -26,7 +26,7 @@ def add_category():
         description = questionary.text("Description (optional):").ask()
 
         # Save to CSV
-        with open(DATA_FILE, 'a', newline='') as file:
+        with open(CATEGORIES_FILE, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([name, description])
 

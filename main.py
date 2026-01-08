@@ -1,9 +1,6 @@
 import questionary
 from src import categories, expenses, analysis, utils
 
-# Define file name
-DATA_FILE = 'data/categories.csv'
-
 operations = ['Add Category', 'Add Expense', 'View All Expenses', 'View By Category', 'View By Date' , 'Exit']
 
 operations = {
