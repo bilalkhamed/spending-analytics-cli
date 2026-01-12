@@ -35,7 +35,7 @@ def date_input():
     if not date_str:
             date_str = datetime.today().strftime('%Y-%m-%d')
 
-    return datetime.strptime(date_str, '%Y-%m-%d')
+    return datetime.strptime(date_str, '%Y-%m-%d').date()
 
 def get_most_spent_categry(df: pd.DataFrame, date: str):
     day = df.loc[df['Date'] == date]
